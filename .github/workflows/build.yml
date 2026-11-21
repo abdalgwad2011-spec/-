@@ -8,12 +8,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0'
+          channel: stable
       - name: Fix structure
         run: |
-          mkdir -p lib
-          if [ -f main.dart ]; then mv main.dart lib/main.dart; fi
+          cp pubspec.yaml pubspec.yaml.bak
+          cp main.dart main.dart.bak
           if [ ! -d android ]; then flutter create . --org com.ansahni --project-name ansahni; fi
+          cp pubspec.yaml.bak pubspec.yaml
+          mkdir -p lib
+          cp main.dart.bak lib/main.dart
           flutter pub get
       - name: Build APK
         run: flutter build apk --release
